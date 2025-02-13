@@ -1,0 +1,16 @@
+[
+{
+  "modid": "Ugorge",
+  "name": "Ugorge",
+  "description": "This mod can load UgoCraft into the MinecraftForge environment.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["KNSN92"],
+  "credits": "mao - The UgoCraft author",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
