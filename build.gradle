@@ -19,7 +19,7 @@ buildscript {
 
 apply plugin: 'forge'
 
-version = "0.1"
+version = "0.1.0"
 group= "com.knsn92.ugorge" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Ugorge"
 targetCompatibility = sourceCompatibility = JavaVersion.VERSION_1_8

@@ -10,6 +10,7 @@ import net.minecraft.launchwrapper.Launch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ public class Ugorge {
 
     public static final String MOD_ID = "Ugorge";
     public static final String MOD_NAME = "Ugorge";
-    public static final String MOD_VERSION = "0.1";
+    public static final String MOD_VERSION = "0.1.0";
 
     public static boolean isDevEnv = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
@@ -54,7 +55,7 @@ public class Ugorge {
 
     }
 
-    private static boolean resolveUgoCraftFile() {
+    private static boolean resolveUgoCraftFile() throws FileNotFoundException {
         LOGGER.info("Searching UgoCraft Jar file...");
         if(!UGOCRAFT_FOLDER.exists()) {
             boolean dirMakeSuccess = UGOCRAFT_FOLDER.mkdir();
@@ -62,14 +63,12 @@ public class Ugorge {
                 LOGGER.error("[Ugorge] For some reason could not generate \"" + UGOCRAFT_FOLDER_NAME + "\" folder in gamedir.");
                 return false;
             }
-            LOGGER.warn("[Ugorge] Since the \""+UGOCRAFT_FOLDER_NAME+"\" folder does not exist, we have created a new folder.");
-            LOGGER.warn("   Please put the UgoCraft Jar File in it.");
-            return false;
+            LOGGER.error("[Ugorge] \""+UGOCRAFT_FOLDER_NAME+"\" folder not found, New folders are created in gamedir.\n\tPlease put the UgoCraft Jar File in it.");
+            throw new FileNotFoundException("\""+UGOCRAFT_FOLDER_NAME+"\" folder not found. New folders are created in gamedir.");
         }
         if(!UGOCRAFT_JAR.exists()) {
-            LOGGER.warn("[Ugorge] UgoCraft Jar File not found, Please put in UgoCraft Jar File.");
-            LOGGER.warn("   It must be named \"" + UGOCRAFT_JAR_NAME + "\".");
-            return false;
+            LOGGER.error("[Ugorge] UgoCraft Jar File not found, Please put in \"" + UGOCRAFT_FOLDER_NAME + "\" folder\nIt must be named \"" + UGOCRAFT_JAR_NAME + "\".");
+            throw new FileNotFoundException("\""+UGOCRAFT_JAR_NAME+"\" File not found. Please see the log.");
         }
         LOGGER.info("[Ugorge] UgoCraft Jar File found!");
         return true;
