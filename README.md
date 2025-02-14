@@ -1,5 +1,7 @@
 # Ugorge
 このminecraftのmodは、1.7.10上のUgoCraftと呼ばれる古のmodを、forgeを導入した環境で動作させることが出来るmodです。
+<br>
+**決してバグ報告をmao氏のページで行わないで下さい。**
 
 ### 動作環境
  - minecraft: 1.7.10
