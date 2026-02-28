@@ -4,18 +4,18 @@ import com.knsn92.ugorge.ugocraft.*;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.launchwrapper.Launch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.io.FileNotFoundException;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.NoSuchFileException;
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.knsn92.ugorge.ugocraft.UgocraftFiles.*;
 
 @Mod(modid = Ugorge.MOD_ID, name = Ugorge.MOD_NAME, version = Ugorge.MOD_VERSION)
 public class Ugorge {
@@ -30,55 +30,41 @@ public class Ugorge {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) throws Exception {
-
-        boolean canLoadUgoCraft = resolveUgoCraftFile();
-        if(!canLoadUgoCraft) {
-            LOGGER.warn("[Ugorge] Skip loading UgoCraft...");
-            return;
+        LOGGER.info("Searching UgoCraft Jar file...");
+        File ugocraftJar = UgocraftLocator.locateUgocraft();
+        if(ugocraftJar == null) {
+            throw new NoSuchFileException("UgoCraft jar file not found in mods folder");
         }
+        LOGGER.info("UgoCraft Jar File found!");
 
-        UgocraftClassData.loadData(UGOCRAFT_JAR);
-        UgocraftLoader.load(UGOCRAFT_JAR);
-        UgocraftHook.init(UGOCRAFT_JAR);
+        // Exclude UgoCraft classes from being loaded by the default classloader
+        Launch.classLoader.addClassLoaderExclusion("net.maocat.");
+
+        UgocraftClassData.loadData(ugocraftJar);
+        UgocraftLoader.load(ugocraftJar);
+        UgocraftHook.init(ugocraftJar);
         UgocraftInvoker.init();
 
-        LOGGER.info("[Ugorge] UgoCraft Loaded");
+        LOGGER.info("UgoCraft Loaded");
 
-        if(isDevEnv) {
-            createTransformedUgoCraftJar();
-        }
+        if(isDevEnv) createTransformedUgoCraftJar(ugocraftJar);
 
         registerEntityRender();
         registerBlockRender();
 
-        LOGGER.info("[Ugorge] UgoCraft Launched");
+        LOGGER.info("UgoCraft Launched");
 
-    }
-
-    private static boolean resolveUgoCraftFile() throws FileNotFoundException {
-        LOGGER.info("Searching UgoCraft Jar file...");
-        if(!UGOCRAFT_FOLDER.exists()) {
-            boolean dirMakeSuccess = UGOCRAFT_FOLDER.mkdir();
-            if(!dirMakeSuccess) {
-                LOGGER.error("[Ugorge] For some reason could not generate \"" + UGOCRAFT_FOLDER_NAME + "\" folder in gamedir.");
-                return false;
-            }
-            LOGGER.error("[Ugorge] \""+UGOCRAFT_FOLDER_NAME+"\" folder not found, New folders are created in gamedir.\n\tPlease put the UgoCraft Jar File in it.");
-            throw new FileNotFoundException("\""+UGOCRAFT_FOLDER_NAME+"\" folder not found. New folders are created in gamedir.");
-        }
-        if(!UGOCRAFT_JAR.exists()) {
-            LOGGER.error("[Ugorge] UgoCraft Jar File not found, Please put in \"" + UGOCRAFT_FOLDER_NAME + "\" folder\nIt must be named \"" + UGOCRAFT_JAR_NAME + "\".");
-            throw new FileNotFoundException("\""+UGOCRAFT_JAR_NAME+"\" File not found. Please see the log.");
-        }
-        LOGGER.info("[Ugorge] UgoCraft Jar File found!");
-        return true;
     }
 
     @SuppressWarnings("unused")
-    private static void createTransformedUgoCraftJar() throws IOException {
-        LOGGER.info("[Ugorge] Generating Transformed Ugocraft Jar...");
-        UgocraftLoader.createJar(UGOCRAFT_JAR, UGOCRAFT_DEBUG_JAR);
-        LOGGER.info("[Ugorge] Transformed Ugocraft Jar generated in \"" + UGOCRAFT_FOLDER_NAME + "/" + UGOCRAFT_DEBUG_FOLDER_NAME + "\"");
+    private static void createTransformedUgoCraftJar(File ugocraftJar) throws IOException {
+        LOGGER.info("Generating Transformed Ugocraft Jar...");
+        File ugocraftDebugFolder = new File(Minecraft.getMinecraft().mcDataDir, "ugocraft/debug");
+        File ugocraftDebugJar = new File(ugocraftDebugFolder, "UgoCraft_Client_Debug.jar");
+        if(ugocraftDebugFolder.mkdirs()) {
+            UgocraftLoader.createJar(ugocraftJar, ugocraftDebugJar);
+        }
+        LOGGER.info("Transformed Ugocraft Jar generated in \"ugocraft/debug\"");
         LOGGER.info("   ※※ Redistribution prohibited in accordance with the wishes of Ugocraft creator Mao ※※");
     }
 

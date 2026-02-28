@@ -7,19 +7,12 @@
  - forge: 1.7.10-10.13.4.1614
  - ugocraft: 1.7.10 2.3.0
 
-### 導入方法
- - このmodのjar ファイルをmodsフォルダに入れて一度minecraftを起動して下さい。
- - UgoCraftのjarファイルが存在しないため一度クラッシュしますが、ゲームディレクトリにugocraftフォルダが追加されているはずです。
- - その中に別途ダウンロードしてきたUgoCraftのjarファイルを入れて下さい。(最初に手動でugocraftフォルダを作ってそこに入れても問題無いです)
- - 再び起動すればUgoCraftが導入されたminecraftが起動する筈です〜
+## 導入方法
+ - このmodのjarファイルと別途ダウンロードしてきたUgoCraftのjarファイルをmodsフォルダに入れてください。
+ - 起動すればUgoCraftが導入されたMinecraftが起動する筈です〜
 
 ## 既知の不具合
  - EntityCulling modを導入すると小さめなUgoObjectがカリングされて見えなくなる
-
-### 起動しない場合
-以下の事を確認して下さい。
-- ugocraftフォルダに入れるUgoCraftのminecraftバージョンは1.7.10になっているか。
-- ugocraftフォルダに入れるUgoCraftのjarファイルの名前は**UgoCraft_Client.jar**になっているか。
 
 ## 今後やりたいこと
 - パッチを当てたUgoCraftのjarファイルをキャッシュして、2回目以降の起動を高速化する設定を追加
