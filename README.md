@@ -1,4 +1,9 @@
 # Ugorge
+
+<p>
+  <img alt="適当なサムネ" src="https://raw.githubusercontent.com/KNSN92/Ugorge/refs/heads/main/thumbnail.png" width="50%" />
+</p>
+
 このMinecraftのmodは、1.7.10上のUgoCraftと呼ばれる古のmodを、forgeを導入した環境で動作させることが出来るmodです。\
 **※※このmodに起因するバグを報告してしまう可能性があるため、決してmao氏のページでバグ報告を行わないで下さい。このリポジトリのIssueに立ててください。※※**
 
