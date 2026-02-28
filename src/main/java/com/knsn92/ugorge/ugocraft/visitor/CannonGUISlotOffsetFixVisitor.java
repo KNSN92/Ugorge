@@ -9,9 +9,9 @@ import org.objectweb.asm.Opcodes;
 /**
  * UgoCraftの大砲コアのGUIが一つズレているバグの修正をするVisitor。
  */
-public class CannonGUISlotOffsetVisitor extends ClassVisitor implements Opcodes {
+public class CannonGUISlotOffsetFixVisitor extends ClassVisitor implements Opcodes {
 
-    public CannonGUISlotOffsetVisitor(int api, ClassVisitor cv) {
+    public CannonGUISlotOffsetFixVisitor(int api, ClassVisitor cv) {
         super(api, new DeobfuscationVisitor(api, cv));
     }
 

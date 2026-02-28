@@ -50,7 +50,7 @@ public class UgocraftLoader {
         ugocraftClassVisitorContext.put("net/maocat/Loader/Boot/RewriteList", (api, cv) -> new RemappingClassAdapter(cv, rewriteListRemapper));
         ugocraftClassVisitorContext.put("net/maocat/Loader/Boot/ClassRewrite", ClassRewriteVisitor::new);
         ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Shub_Niggurath", EntityRenderLoaderVisitor::new);
-        ugocraftClassVisitorContext.put("net/maocat/UgoCraft/a/Azathoth", CannonGUISlotOffsetVisitor::new);
+        ugocraftClassVisitorContext.put("net/maocat/UgoCraft/a/Azathoth", CannonGUISlotOffsetFixVisitor::new);
 
         ugocraftClassVisitorContext.setDefault(DeobfuscationVisitor::new);
     }
