@@ -19,6 +19,9 @@ public class UgocraftInvoker {
 
     public static final String internalName = UgocraftInvoker.class.getName().replace(".", "/");
 
+    public static final String serverInterruptClassName = "net.maocat.Loader.Process.Server.ServerInterrupt";
+    public static final String clientInterruptClassName = "net.maocat.Loader.Process.Client.ClientInterrupt";
+
     private static Method c001;
     private static Method c002;
     private static Method c003;
@@ -31,8 +34,8 @@ public class UgocraftInvoker {
      * 初期化。{@link UgocraftLoader}の初期化が前提。
      */
     public static void init() {
-        Class<?> serverInterrupt = UgocraftLoader.getClass("net.maocat.Loader.Process.Server.ServerInterrupt");
-        Class<?> clientInterrupt = UgocraftLoader.getClass("net.maocat.Loader.Process.Client.ClientInterrupt");
+        Class<?> serverInterrupt = UgocraftLoader.getClass(serverInterruptClassName);
+        Class<?> clientInterrupt = UgocraftLoader.getClass(clientInterruptClassName);
 
         if(serverInterrupt == null || clientInterrupt == null) {
             return;
