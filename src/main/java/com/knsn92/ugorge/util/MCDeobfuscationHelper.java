@@ -8,6 +8,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.nio.file.NoSuchFileException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,8 +23,12 @@ public class MCDeobfuscationHelper {
 
     static {
         if (Ugorge.isDevEnv) {
+            File mcpNotchMapFile = new File(System.getProperty("net.minecraftforge.gradle.GradleStart.srg.mcp-notch"));
             try {
-                loadRawMapsFromFile(new File(System.getProperty("user.home") + "/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/srgs/mcp-notch.srg"));
+                if(!mcpNotchMapFile.exists()) {
+                    throw new NoSuchFileException("Ugorge requires a notch to mcp mapping file, but it cannot be found.");
+                }
+                loadRawMapsFromFile(mcpNotchMapFile);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
