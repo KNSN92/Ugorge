@@ -61,7 +61,7 @@ public class Ugorge {
         LOGGER.info("Generating Transformed Ugocraft Jar...");
         File ugocraftDebugFolder = new File(Minecraft.getMinecraft().mcDataDir, "ugocraft/debug");
         File ugocraftDebugJar = new File(ugocraftDebugFolder, "UgoCraft_Client_Debug.jar");
-        if(ugocraftDebugFolder.mkdirs()) {
+        if(ugocraftDebugFolder.exists() || ugocraftDebugFolder.mkdirs()) {
             UgocraftLoader.createJar(ugocraftJar, ugocraftDebugJar);
         }
         LOGGER.info("Transformed Ugocraft Jar generated in \"ugocraft/debug\"");
