@@ -20,7 +20,7 @@ public class ClassRewriteVisitor extends ClassVisitor implements Opcodes {
 
         mv.visitVarInsn(ALOAD, 2);
         mv.visitVarInsn(ALOAD, 2);
-        mv.visitLdcInsn(File.separator);
+        mv.visitLdcInsn("/");
         mv.visitMethodInsn(INVOKEVIRTUAL, "java/lang/String", "lastIndexOf", "(Ljava/lang/String;)I", false);
         mv.visitInsn(ICONST_1);
         mv.visitInsn(IADD);

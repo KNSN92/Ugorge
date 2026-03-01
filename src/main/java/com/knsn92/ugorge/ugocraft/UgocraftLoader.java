@@ -38,7 +38,7 @@ public class UgocraftLoader {
             String name = (String)value;
             if(ArrayUtils.contains(UgocraftClassData.rewriteListClasses, name)) {
                 String mappedName = FMLDeobfuscatingRemapper.INSTANCE.map(name);
-                return mappedName.substring(mappedName.lastIndexOf(File.separator)+1);
+                return mappedName.substring(mappedName.lastIndexOf("/")+1);
             }
             return value;
         }
@@ -84,10 +84,11 @@ public class UgocraftLoader {
                     continue;
                 }
 
-                className = className.replace(File.separator, ".");
+                className = className.replace("/", ".");
                 ugocraftClassLoader.putClass(className, classBytes);
             }else {
-                String resourceURLStr = "jar:file:" + ugocraftJarFile + "!" + File.separator + entry.getName();
+
+                String resourceURLStr = "jar:file:" + ugocraftJarFile + "!/" + entry.getName();
                 URL resourceURL = new URL(resourceURLStr);
                 ugocraftClassLoader.putResource(entry.getName(), resourceURL);
             }
@@ -143,9 +144,9 @@ public class UgocraftLoader {
                 String className = entry.getName();
 
                 if(entry.getName().startsWith("rewrite/")) {
-                    String rewriteClassName = className.substring(className.lastIndexOf(File.separator)+1, className.indexOf("."));
+                    String rewriteClassName = className.substring(className.lastIndexOf("/")+1, className.indexOf("."));
                     String mcpName = FMLDeobfuscatingRemapper.INSTANCE.map(rewriteClassName);
-                    className = "rewrite/"+mcpName.substring(mcpName.lastIndexOf(File.separator)+1)+".class";
+                    className = "rewrite/"+mcpName.substring(mcpName.lastIndexOf("/")+1)+".class";
                 }
 
                 jos.putNextEntry(new JarEntry(className));

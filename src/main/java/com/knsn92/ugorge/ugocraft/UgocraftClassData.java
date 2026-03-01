@@ -49,8 +49,6 @@ public class UgocraftClassData {
                     continue;
                 }
 
-                className = className.replace(File.separator, "/");
-
                 String superName = cr.getSuperName();
 
                 superClasses.put(className, superName);
