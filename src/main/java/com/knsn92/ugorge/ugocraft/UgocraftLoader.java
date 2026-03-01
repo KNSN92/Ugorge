@@ -31,24 +31,9 @@ public class UgocraftLoader {
 
     private static final MultiClassVisitorContext ugocraftClassVisitorContext;
 
-    private static final Remapper rewriteListRemapper = new Remapper() {
-        @Override
-        public Object mapValue(Object value) {
-            if(!(value instanceof String)) return value;
-            String name = (String)value;
-            if(ArrayUtils.contains(UgocraftClassData.rewriteListClasses, name)) {
-                String mappedName = FMLDeobfuscatingRemapper.INSTANCE.map(name);
-                return mappedName.substring(mappedName.lastIndexOf("/")+1);
-            }
-            return value;
-        }
-    };
-
     static {
         ugocraftClassVisitorContext = new MultiClassVisitorContext();
 
-        ugocraftClassVisitorContext.put("net/maocat/Loader/Boot/RewriteList", (api, cv) -> new RemappingClassAdapter(cv, rewriteListRemapper));
-        ugocraftClassVisitorContext.put("net/maocat/Loader/Boot/ClassRewrite", ClassRewriteVisitor::new);
         ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Shub_Niggurath", EntityRenderLoaderVisitor::new);
         ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Client/Byakhee", WaitUntilSoundMgrLoadFixVisitor::new);
         ugocraftClassVisitorContext.put("net/maocat/UgoCraft/a/Azathoth", CannonGUISlotOffsetFixVisitor::new);
@@ -71,6 +56,12 @@ public class UgocraftLoader {
 
                 ClassReader cr = new ClassReader(jis);
 
+                String className = cr.getClassName();
+
+                if(ArrayUtils.contains(UgocraftClassData.rewriteListClasses, className)) {
+                    continue;
+                }
+
                 ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 
                 MultiClassVisitor mcv = new MultiClassVisitor(Opcodes.ASM5, cw, ugocraftClassVisitorContext);
@@ -78,12 +69,6 @@ public class UgocraftLoader {
                 cr.accept(mcv, ClassReader.EXPAND_FRAMES);
 
                 byte[] classBytes = cw.toByteArray();
-
-                String className = cr.getClassName();
-
-                if(ArrayUtils.contains(UgocraftClassData.rewriteListClasses, className)) {
-                    continue;
-                }
 
                 className = className.replace("/", ".");
                 ugocraftClassLoader.putClass(className, classBytes);
