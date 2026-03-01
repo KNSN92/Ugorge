@@ -2,7 +2,6 @@ package com.knsn92.ugorge.ugocraft;
 
 import com.knsn92.ugorge.util.ByteArrayClassLoader;
 import com.knsn92.ugorge.util.MultiClassVisitor;
-import com.knsn92.ugorge.util.MultiClassVisitorContext;
 import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.server.MinecraftServer;
 import org.apache.commons.lang3.ArrayUtils;
@@ -29,10 +28,10 @@ public class UgocraftLoader {
 
     private static ByteArrayClassLoader ugocraftClassLoader = null;
 
-    private static final MultiClassVisitorContext ugocraftClassVisitorContext;
+    private static final MultiClassVisitor.Context ugocraftClassVisitorContext;
 
     static {
-        ugocraftClassVisitorContext = new MultiClassVisitorContext();
+        ugocraftClassVisitorContext = new MultiClassVisitor.Context();
 
         ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Shub_Niggurath", EntityRenderLoaderVisitor::new);
         ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Client/Byakhee", WaitUntilSoundMgrLoadFixVisitor::new);
