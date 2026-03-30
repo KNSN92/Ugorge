@@ -2,7 +2,6 @@ package com.knsn92.ugorge.core_plugin;
 
 import com.knsn92.ugorge.Ugorge;
 import com.knsn92.ugorge.ugocraft.UgocraftHook;
-import com.knsn92.ugorge.ugocraft.UgocraftInvoker;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.*;
 
