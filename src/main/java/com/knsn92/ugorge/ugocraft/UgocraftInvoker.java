@@ -20,13 +20,13 @@ public class UgocraftInvoker {
     public static final String serverInterruptClassName = "net.maocat.Loader.Process.Server.ServerInterrupt";
     public static final String clientInterruptClassName = "net.maocat.Loader.Process.Client.ClientInterrupt";
 
-    private Method c001;
-    private Method c002;
-    private Method c003;
-    private Method c004;
-    private Method c005;
-    private Method s001;
-    private Method s002;
+    private final Method c001;
+    private final Method c002;
+    private final Method c003;
+    private final Method c004;
+    private final Method c005;
+    private final Method s001;
+    private final Method s002;
 
     /**
      * 初期化。{@link UgocraftLoader}の初期化が前提。

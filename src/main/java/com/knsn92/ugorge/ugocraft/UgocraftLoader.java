@@ -26,7 +26,7 @@ import com.knsn92.ugorge.ugocraft.visitor.*;
  */
 public class UgocraftLoader {
 
-    private ByteArrayClassLoader ugocraftClassLoader;
+    private final ByteArrayClassLoader ugocraftClassLoader;
 
     private final MultiClassVisitor.Context ugocraftClassVisitorContext;
 
