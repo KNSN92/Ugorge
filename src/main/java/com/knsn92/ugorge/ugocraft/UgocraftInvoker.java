@@ -17,8 +17,8 @@ import java.util.Map;
  */
 public class UgocraftInvoker {
 
-    public static final String serverInterruptClassName = "net.maocat.Loader.Process.Server.ServerInterrupt";
-    public static final String clientInterruptClassName = "net.maocat.Loader.Process.Client.ClientInterrupt";
+    private static final String serverInterruptClassName = "net.maocat.Loader.Process.Server.ServerInterrupt";
+    private static final String clientInterruptClassName = "net.maocat.Loader.Process.Client.ClientInterrupt";
 
     private final Method c001;
     private final Method c002;
