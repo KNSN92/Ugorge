@@ -43,7 +43,7 @@ public class UgocraftHook {
 
     @SuppressWarnings("unused")
     public static ClassLoader getUgocraftClassLoader() {
-        return Ugorge.instance().loader.getClassLoader();
+        return Ugorge.instance().classLoader;
     }
 
     @SuppressWarnings("unused")

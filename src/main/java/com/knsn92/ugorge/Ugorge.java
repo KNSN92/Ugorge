@@ -37,7 +37,8 @@ public class Ugorge {
     }
 
     public File ugocraftJar;
-    public UgocraftLoader loader;
+    public UgocraftClassData classData;
+    public ClassLoader classLoader;
     public UgocraftInvoker invoker;
 
     @Mod.EventHandler
@@ -52,12 +53,14 @@ public class Ugorge {
         // Exclude UgoCraft classes from being loaded by the default classloader
         Launch.classLoader.addClassLoaderExclusion("net.maocat.");
 
-        this.loader = new UgocraftLoader(this.ugocraftJar);
-        this.invoker = new UgocraftInvoker(this.loader.getClassLoader());
+        UgocraftLoader loader = new UgocraftLoader(this.ugocraftJar);
+        this.classData = loader.getClassData();
+        this.classLoader = loader.getClassLoader();
+        this.invoker = new UgocraftInvoker(this.classLoader);
 
         LOGGER.info("UgoCraft Loaded");
 
-        if(isDevEnv) createTransformedUgoCraftJar(this.ugocraftJar);
+        if(isDevEnv) createTransformedUgoCraftJar(loader, this.ugocraftJar);
 
         registerEntityRender();
         registerBlockRender();
@@ -67,12 +70,12 @@ public class Ugorge {
     }
 
     @SuppressWarnings("unused")
-    private void createTransformedUgoCraftJar(File ugocraftJar) throws IOException {
+    private void createTransformedUgoCraftJar(UgocraftLoader loader, File ugocraftJar) throws IOException {
         LOGGER.info("Generating Transformed Ugocraft Jar...");
         File ugocraftDebugFolder = new File(Minecraft.getMinecraft().mcDataDir, "ugocraft/debug");
         File ugocraftDebugJar = new File(ugocraftDebugFolder, "UgoCraft_Client_Debug.jar");
         if(ugocraftDebugFolder.exists() || ugocraftDebugFolder.mkdirs()) {
-            this.loader.createJar(ugocraftJar, ugocraftDebugJar);
+            loader.createJar(ugocraftJar, ugocraftDebugJar);
         }
         LOGGER.info("Transformed Ugocraft Jar generated in \"ugocraft/debug\"");
         LOGGER.info("   ※※ Redistribution prohibited in accordance with the wishes of Ugocraft creator Mao ※※");
@@ -92,7 +95,7 @@ public class Ugorge {
     }
 
     private void registerBlockRender() throws IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
-        Class<?> ugoRenderRegistry = this.loader.getClassLoader().loadClass("net.maocat.Loader.Process.Client.Shantaks");
+        Class<?> ugoRenderRegistry = this.classLoader.loadClass("net.maocat.Loader.Process.Client.Shantaks");
         Map<?, ?> renderers = (Map<?, ?>) ugoRenderRegistry.getField("morning_glory").get(null);
 
         for (Object renderId : renderers.keySet()) {
