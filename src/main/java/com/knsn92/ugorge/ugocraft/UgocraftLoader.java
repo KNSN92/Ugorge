@@ -53,12 +53,13 @@ public class UgocraftLoader {
         try(JarInputStream jis = new JarInputStream(Files.newInputStream(ugocraftJarFile.toPath()))) {
             JarEntry entry;
             while((entry = jis.getNextJarEntry()) != null) {
-                if(entry.getName().endsWith(".class")) {
-                    ClassReader cr = new ClassReader(jis);
-                    String internalClassName = cr.getClassName();
-                    if(entry.getName().startsWith("rewrite/")) {
+                String entryName = entry.getName();
+                if(entryName.endsWith(".class")) {
+                    if(entryName.startsWith("rewrite/")) {
                         continue;
                     }
+                    ClassReader cr = new ClassReader(jis);
+                    String internalClassName = cr.getClassName();
                     loadedClassReaders.put(internalClassName, cr);
                 }else {
                     String resourceURLStr = "jar:file:" + ugocraftJarFile + "!/" + entry.getName();
@@ -127,30 +128,22 @@ public class UgocraftLoader {
         ) {
             JarEntry entry;
             while ((entry = jis.getNextJarEntry()) != null) {
+                String entryName = entry.getName();
                 if (entry.getName().endsWith(".class")) {
-
+                    if(entryName.startsWith("rewrite")) {
+                        continue;
+                    }
                     ClassReader cr = new ClassReader(jis);
 
                     ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
-
                     MultiClassVisitor mcv = new MultiClassVisitor(Opcodes.ASM5, cw, this.ugocraftClassVisitorContext);
-
                     cr.accept(mcv, ClassReader.EXPAND_FRAMES);
-
                     byte[] classBytes = cw.toByteArray();
 
-                    String className = entry.getName();
-
-                    if (className.startsWith("rewrite/")) {
-                        String rewriteClassName = className.substring(className.lastIndexOf("/") + 1, className.indexOf("."));
-                        String mcpName = FMLDeobfuscatingRemapper.INSTANCE.map(rewriteClassName);
-                        className = "rewrite/" + mcpName.substring(mcpName.lastIndexOf("/") + 1) + ".class";
-                    }
-
-                    jos.putNextEntry(new JarEntry(className));
+                    jos.putNextEntry(new JarEntry(entryName));
                     jos.write(classBytes);
                 } else {
-                    jos.putNextEntry(new JarEntry(entry.getName()));
+                    jos.putNextEntry(new JarEntry(entryName));
                     byte[] buffer = new byte[1024];
                     int read;
                     while ((read = jis.read(buffer)) != -1) {
