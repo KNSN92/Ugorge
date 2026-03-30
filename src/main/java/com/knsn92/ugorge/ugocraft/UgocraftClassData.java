@@ -11,8 +11,6 @@ import java.util.*;
  */
 public class UgocraftClassData {
 
-    public static final String[] rewriteListClasses = {"bjb", "bnn", "blm", "nh"};
-
     private final Map<String, String>   superClasses = new HashMap<>();
     private final Map<String, String[]> implInterfaces = new HashMap<>();
     private final Map<String, String[]> fields = new HashMap<>();
