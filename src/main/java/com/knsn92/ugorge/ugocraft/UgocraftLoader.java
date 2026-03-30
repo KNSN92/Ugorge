@@ -26,18 +26,18 @@ import com.knsn92.ugorge.ugocraft.visitor.*;
  */
 public class UgocraftLoader {
 
-    private static ByteArrayClassLoader ugocraftClassLoader = null;
+    private ByteArrayClassLoader ugocraftClassLoader;
 
-    private static final MultiClassVisitor.Context ugocraftClassVisitorContext;
+    private final MultiClassVisitor.Context ugocraftClassVisitorContext;
 
-    static {
-        ugocraftClassVisitorContext = new MultiClassVisitor.Context();
+    {
+        this.ugocraftClassVisitorContext = new MultiClassVisitor.Context();
 
-        ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Shub_Niggurath", EntityRenderLoaderVisitor::new);
-        ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Client/Byakhee", WaitUntilSoundMgrLoadFixVisitor::new);
-        ugocraftClassVisitorContext.put("net/maocat/UgoCraft/a/Azathoth", CannonGUISlotOffsetFixVisitor::new);
+        this.ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Shub_Niggurath", EntityRenderLoaderVisitor::new);
+        this.ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Client/Byakhee", WaitUntilSoundMgrLoadFixVisitor::new);
+        this.ugocraftClassVisitorContext.put("net/maocat/UgoCraft/a/Azathoth", CannonGUISlotOffsetFixVisitor::new);
 
-        ugocraftClassVisitorContext.setDefault(DeobfuscationVisitor::new);
+        this.ugocraftClassVisitorContext.setDefault(DeobfuscationVisitor::new);
     }
 
     /**
@@ -45,8 +45,8 @@ public class UgocraftLoader {
      * @param ugocraftJarFile UgoCraftのjarファイル
      * @throws IOException UgoCraftのjarファイルの参照に失敗したとき
      */
-    public static void load(File ugocraftJarFile) throws IOException {
-        ugocraftClassLoader = new ByteArrayClassLoader(MinecraftServer.class.getClassLoader());
+    public UgocraftLoader(File ugocraftJarFile) throws IOException {
+        this.ugocraftClassLoader = new ByteArrayClassLoader(MinecraftServer.class.getClassLoader());
 
         JarInputStream jis = new JarInputStream(Files.newInputStream(ugocraftJarFile.toPath()));
         JarEntry entry;
@@ -63,19 +63,19 @@ public class UgocraftLoader {
 
                 ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 
-                MultiClassVisitor mcv = new MultiClassVisitor(Opcodes.ASM5, cw, ugocraftClassVisitorContext);
+                MultiClassVisitor mcv = new MultiClassVisitor(Opcodes.ASM5, cw, this.ugocraftClassVisitorContext);
 
                 cr.accept(mcv, ClassReader.EXPAND_FRAMES);
 
                 byte[] classBytes = cw.toByteArray();
 
                 className = className.replace("/", ".");
-                ugocraftClassLoader.putClass(className, classBytes);
+                this.ugocraftClassLoader.putClass(className, classBytes);
             }else {
 
                 String resourceURLStr = "jar:file:" + ugocraftJarFile + "!/" + entry.getName();
                 URL resourceURL = new URL(resourceURLStr);
-                ugocraftClassLoader.putResource(entry.getName(), resourceURL);
+                this.ugocraftClassLoader.putResource(entry.getName(), resourceURL);
             }
         }
     }
@@ -85,10 +85,9 @@ public class UgocraftLoader {
      * @param className 読み出すクラス名(例:java.lang.Object)
      * @return 読み出したクラスオブジェクト。見つからなければnull
      */
-    public static Class<?> getClass(String className) {
-        if(ugocraftClassLoader == null) return null;
+    public Class<?> getClass(String className) {
         try {
-            return ugocraftClassLoader.loadClass(className);
+            return this.ugocraftClassLoader.loadClass(className);
         } catch (ClassNotFoundException ignore) {
             return null;
         }
@@ -98,8 +97,8 @@ public class UgocraftLoader {
      * 内部で使われているクラスローダーのgetter。
      * @return 内部で使われているクラスローダー
      */
-    public static ClassLoader getClassLoader() {
-        return ugocraftClassLoader;
+    public ClassLoader getClassLoader() {
+        return this.ugocraftClassLoader;
     }
 
     /**
@@ -108,7 +107,7 @@ public class UgocraftLoader {
      * @param output 出力のファイル
      * @throws IOException UgoCraftのjarファイルの参照に失敗したとき
      */
-    public static void createJar(File ugocraftJarFile, File output) throws IOException {
+    public void createJar(File ugocraftJarFile, File output) throws IOException {
         JarInputStream jis = new JarInputStream(Files.newInputStream(ugocraftJarFile.toPath()));
         JarOutputStream jos = new JarOutputStream(Files.newOutputStream(output.toPath()));
 
@@ -120,7 +119,7 @@ public class UgocraftLoader {
 
                 ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_MAXS | ClassWriter.COMPUTE_FRAMES);
 
-                MultiClassVisitor mcv = new MultiClassVisitor(Opcodes.ASM5, cw, ugocraftClassVisitorContext);
+                MultiClassVisitor mcv = new MultiClassVisitor(Opcodes.ASM5, cw, this.ugocraftClassVisitorContext);
 
                 cr.accept(mcv, ClassReader.EXPAND_FRAMES);
 

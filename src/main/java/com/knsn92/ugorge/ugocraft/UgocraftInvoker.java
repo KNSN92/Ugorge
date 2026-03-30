@@ -17,25 +17,23 @@ import java.util.Map;
  */
 public class UgocraftInvoker {
 
-    public static final String internalName = UgocraftInvoker.class.getName().replace(".", "/");
-
     public static final String serverInterruptClassName = "net.maocat.Loader.Process.Server.ServerInterrupt";
     public static final String clientInterruptClassName = "net.maocat.Loader.Process.Client.ClientInterrupt";
 
-    private static Method c001;
-    private static Method c002;
-    private static Method c003;
-    private static Method c004;
-    private static Method c005;
-    private static Method s001;
-    private static Method s002;
+    private Method c001;
+    private Method c002;
+    private Method c003;
+    private Method c004;
+    private Method c005;
+    private Method s001;
+    private Method s002;
 
     /**
      * 初期化。{@link UgocraftLoader}の初期化が前提。
      */
-    public static void init() {
-        Class<?> serverInterrupt = UgocraftLoader.getClass(serverInterruptClassName);
-        Class<?> clientInterrupt = UgocraftLoader.getClass(clientInterruptClassName);
+    public UgocraftInvoker(UgocraftLoader loader) {
+        Class<?> serverInterrupt = loader.getClass(serverInterruptClassName);
+        Class<?> clientInterrupt = loader.getClass(clientInterruptClassName);
 
         if(serverInterrupt == null || clientInterrupt == null) {
             return;
@@ -73,7 +71,7 @@ public class UgocraftInvoker {
      * @param s3FPacketCustomPayload
      */
     @SuppressWarnings("unused")
-    public static void invoke_c001(NetHandlerPlayClient netHandlerPlayClient, S3FPacketCustomPayload s3FPacketCustomPayload) {
+    public void invoke_c001(NetHandlerPlayClient netHandlerPlayClient, S3FPacketCustomPayload s3FPacketCustomPayload) {
         try {
             c001.invoke(null, netHandlerPlayClient, s3FPacketCustomPayload);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -86,7 +84,7 @@ public class UgocraftInvoker {
      * @param renderMap
      */
     @SuppressWarnings("unused")
-    public static void invoke_c002(Map<?, ?> renderMap) {
+    public void invoke_c002(Map<?, ?> renderMap) {
         try {
             c002.invoke(null, renderMap);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -106,7 +104,7 @@ public class UgocraftInvoker {
      * @return
      */
     @SuppressWarnings("unused")
-    public static boolean invoke_c003(int modelId, RenderBlocks renderer, IBlockAccess world, Block block, int x, int y, int z) {
+    public boolean invoke_c003(int modelId, RenderBlocks renderer, IBlockAccess world, Block block, int x, int y, int z) {
         try {
             return (boolean)c003.invoke(null, modelId, renderer, world, block, x, y, z);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -122,7 +120,7 @@ public class UgocraftInvoker {
      * @param metadata
      */
     @SuppressWarnings("unused")
-    public static void invoke_c004(int modelId, RenderBlocks renderer, Block block, int metadata) {
+    public void invoke_c004(int modelId, RenderBlocks renderer, Block block, int metadata) {
         try {
             c004.invoke(null, modelId, renderer, block, metadata);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -136,7 +134,7 @@ public class UgocraftInvoker {
      * @return
      */
     @SuppressWarnings("unused")
-    public static boolean invoke_c005(int modelId) {
+    public boolean invoke_c005(int modelId) {
         try {
             return (boolean)c005.invoke(null, modelId);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -150,7 +148,7 @@ public class UgocraftInvoker {
      * @param c17PacketCustomPayload
      */
     @SuppressWarnings("unused")
-    public static void invoke_s001(NetHandlerPlayServer netHandlerPlayServer, C17PacketCustomPayload c17PacketCustomPayload) {
+    public void invoke_s001(NetHandlerPlayServer netHandlerPlayServer, C17PacketCustomPayload c17PacketCustomPayload) {
         try {
             s001.invoke(null, netHandlerPlayServer, c17PacketCustomPayload);
         } catch (InvocationTargetException | IllegalAccessException e) {
@@ -162,7 +160,7 @@ public class UgocraftInvoker {
      * c002の初期化処理だけを行う。ただUgoCraft内では使われてない
      */
     @SuppressWarnings("unused")
-    public static void invoke_s002() {
+    public void invoke_s002() {
         try {
             s002.invoke(null);
         } catch (InvocationTargetException | IllegalAccessException e) {

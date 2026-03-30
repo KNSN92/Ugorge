@@ -28,11 +28,22 @@ public class Ugorge {
 
     public static final Logger LOGGER = LogManager.getLogger("Ugorge");
 
+    @Mod.Instance
+    private static Ugorge instance;
+
+    public static Ugorge instance() {
+        return instance;
+    }
+
+    public File ugocraftJar;
+    public UgocraftLoader loader;
+    public UgocraftInvoker invoker;
+
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) throws Exception {
         LOGGER.info("Searching UgoCraft Jar file...");
-        File ugocraftJar = UgocraftLocator.locateUgocraft();
-        if(ugocraftJar == null) {
+        this.ugocraftJar = UgocraftLocator.locateUgocraft();
+        if(this.ugocraftJar == null) {
             throw new NoSuchFileException("UgoCraft jar file not found in mods folder");
         }
         LOGGER.info("UgoCraft Jar File found!");
@@ -40,14 +51,13 @@ public class Ugorge {
         // Exclude UgoCraft classes from being loaded by the default classloader
         Launch.classLoader.addClassLoaderExclusion("net.maocat.");
 
-        UgocraftClassData.loadData(ugocraftJar);
-        UgocraftLoader.load(ugocraftJar);
-        UgocraftHook.init(ugocraftJar);
-        UgocraftInvoker.init();
+        UgocraftClassData.loadData(this.ugocraftJar);
+        this.loader = new UgocraftLoader(this.ugocraftJar);
+        this.invoker = new UgocraftInvoker(loader);
 
         LOGGER.info("UgoCraft Loaded");
 
-        if(isDevEnv) createTransformedUgoCraftJar(ugocraftJar);
+        if(isDevEnv) createTransformedUgoCraftJar(this.ugocraftJar);
 
         registerEntityRender();
         registerBlockRender();
@@ -57,22 +67,22 @@ public class Ugorge {
     }
 
     @SuppressWarnings("unused")
-    private static void createTransformedUgoCraftJar(File ugocraftJar) throws IOException {
+    private void createTransformedUgoCraftJar(File ugocraftJar) throws IOException {
         LOGGER.info("Generating Transformed Ugocraft Jar...");
         File ugocraftDebugFolder = new File(Minecraft.getMinecraft().mcDataDir, "ugocraft/debug");
         File ugocraftDebugJar = new File(ugocraftDebugFolder, "UgoCraft_Client_Debug.jar");
         if(ugocraftDebugFolder.exists() || ugocraftDebugFolder.mkdirs()) {
-            UgocraftLoader.createJar(ugocraftJar, ugocraftDebugJar);
+            this.loader.createJar(ugocraftJar, ugocraftDebugJar);
         }
         LOGGER.info("Transformed Ugocraft Jar generated in \"ugocraft/debug\"");
         LOGGER.info("   ※※ Redistribution prohibited in accordance with the wishes of Ugocraft creator Mao ※※");
     }
 
     @SuppressWarnings("unchecked")
-    private static void registerEntityRender() {
+    private void registerEntityRender() {
         Map<Class<?>, Render> ugocraftEntityRenderMap = new HashMap<>();
 
-        UgocraftInvoker.invoke_c002(ugocraftEntityRenderMap);
+        this.invoker.invoke_c002(ugocraftEntityRenderMap);
 
         for(Map.Entry<Class<?>, Render> entry: ugocraftEntityRenderMap.entrySet()) {
             Render render = entry.getValue();
@@ -81,8 +91,8 @@ public class Ugorge {
         }
     }
 
-    private static void registerBlockRender() throws IllegalAccessException, NoSuchFieldException {
-        Class<?> ugoRenderRegistry = UgocraftLoader.getClass("net.maocat.Loader.Process.Client.Shantaks");
+    private void registerBlockRender() throws IllegalAccessException, NoSuchFieldException {
+        Class<?> ugoRenderRegistry = this.loader.getClass("net.maocat.Loader.Process.Client.Shantaks");
         if(ugoRenderRegistry != null) {
             Map<?, ?> renderers = (Map<?, ?>) ugoRenderRegistry.getField("morning_glory").get(null);
 

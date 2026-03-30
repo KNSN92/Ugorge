@@ -38,7 +38,7 @@ public class EntityRenderLoaderVisitor extends ClassVisitor implements Opcodes {
                 @Override
                 public void visitVarInsn(int opcode, int var) {
                     if(this.line == 182 && opcode == ALOAD && var == 0) {
-                        super.visitFieldInsn(GETSTATIC, UgocraftHook.internalName, "ugocraftClassLoader", "Ljava/lang/ClassLoader;");
+                        super.visitMethodInsn(INVOKESTATIC, UgocraftHook.internalName, "getUgocraftClassLoader", "()Ljava/lang/ClassLoader;", false);
                     }else {
                         super.visitVarInsn(opcode, var);
                     }
@@ -102,8 +102,8 @@ public class EntityRenderLoaderVisitor extends ClassVisitor implements Opcodes {
                             return;
                         }
                         if ("java/io/File.<init>(Ljava/net/URI;)V".equals(ASMHelper.toFullMethodName(owner, name, desc))) {
-                            String fieldName = line == 51 ? "minecraftServerLocation" : "ugocraftJarLocation";
-                            super.visitFieldInsn(GETSTATIC, UgocraftHook.internalName, fieldName, "Ljava/io/File;");
+                            String fieldName = line == 51 ? "getMinecraftServerLocation" : "getUgocraftJarLocation";
+                            super.visitMethodInsn(INVOKESTATIC, UgocraftHook.internalName, fieldName, "()Ljava/io/File;", false);
                             return;
                         }
                     }

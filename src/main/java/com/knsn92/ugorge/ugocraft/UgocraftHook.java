@@ -1,5 +1,10 @@
 package com.knsn92.ugorge.ugocraft;
 
+import com.knsn92.ugorge.Ugorge;
+import net.minecraft.client.network.NetHandlerPlayClient;
+import net.minecraft.network.NetHandlerPlayServer;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.server.MinecraftServer;
 import org.apache.commons.lang3.StringUtils;
 
@@ -11,26 +16,14 @@ import java.net.URISyntaxException;
  */
 public class UgocraftHook {
 
-    public static File ugocraftJarLocation = null;
-    public static File minecraftServerLocation = null;
-    public static ClassLoader ugocraftClassLoader = null;
-
     public static final String internalName = UgocraftHook.class.getName().replace(".", "/");
 
-    /**
-     * 初期化。{@link UgocraftLoader}の初期化が前提。
-     * @param ugocraftJarFile
-     */
-    public static void init(File ugocraftJarFile) {
-        ugocraftJarLocation = ugocraftJarFile;
 
-        String mcServerURI = getMcServerURI();
-        minecraftServerLocation = new File(mcServerURI);
-
-        ugocraftClassLoader = UgocraftLoader.getClassLoader();
+    public static File getUgocraftJarLocation() {
+        return Ugorge.instance().ugocraftJar;
     }
 
-    private static String getMcServerURI() {
+    public static File getMinecraftServerLocation() {
         String mcServerURI;
         try {
             mcServerURI = MinecraftServer.class.getProtectionDomain().getCodeSource().getLocation().toURI().toString();
@@ -43,6 +36,18 @@ public class UgocraftHook {
         if(mcServerURI.contains("!")) {
             mcServerURI = mcServerURI.substring(0, mcServerURI.indexOf("!"));
         }
-        return mcServerURI;
+        return new File(mcServerURI);
+    }
+
+    public static ClassLoader getUgocraftClassLoader() {
+        return Ugorge.instance().loader.getClassLoader();
+    }
+
+    public static void c001(NetHandlerPlayClient netHandlerPlayClient, S3FPacketCustomPayload s3FPacketCustomPayload) {
+        Ugorge.instance().invoker.invoke_c001(netHandlerPlayClient, s3FPacketCustomPayload);
+    }
+
+    public static void s001(NetHandlerPlayServer netHandlerPlayServer, C17PacketCustomPayload c17PacketCustomPayload) {
+        Ugorge.instance().invoker.invoke_s001(netHandlerPlayServer, c17PacketCustomPayload);
     }
 }

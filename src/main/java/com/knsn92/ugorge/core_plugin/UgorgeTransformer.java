@@ -1,6 +1,7 @@
 package com.knsn92.ugorge.core_plugin;
 
 import com.knsn92.ugorge.Ugorge;
+import com.knsn92.ugorge.ugocraft.UgocraftHook;
 import com.knsn92.ugorge.ugocraft.UgocraftInvoker;
 import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.*;
@@ -37,7 +38,7 @@ public class UgorgeTransformer implements IClassTransformer {
                         if(line == (Ugorge.isDevEnv ? 1603 : 1416)) {
                             super.visitVarInsn(Opcodes.ALOAD, 0);
                             super.visitVarInsn(Opcodes.ALOAD, 1);
-                            super.visitMethodInsn(Opcodes.INVOKESTATIC, UgocraftInvoker.internalName, "invoke_c001",
+                            super.visitMethodInsn(Opcodes.INVOKESTATIC, UgocraftHook.internalName, "c001",
                                     Type.getMethodDescriptor(Type.VOID_TYPE,
                                             Type.getObjectType("net/minecraft/client/network/NetHandlerPlayClient"),
                                             Type.getObjectType("net/minecraft/network/play/server/S3FPacketCustomPayload")), false);
@@ -70,7 +71,7 @@ public class UgorgeTransformer implements IClassTransformer {
                         if(line == (Ugorge.isDevEnv ? 1172 : 1072)) {
                             super.visitVarInsn(Opcodes.ALOAD, 0);
                             super.visitVarInsn(Opcodes.ALOAD, 1);
-                            super.visitMethodInsn(Opcodes.INVOKESTATIC, UgocraftInvoker.internalName, "invoke_s001",
+                            super.visitMethodInsn(Opcodes.INVOKESTATIC, UgocraftHook.internalName, "s001",
                                     Type.getMethodDescriptor(Type.VOID_TYPE,
                                             Type.getObjectType("net/minecraft/network/NetHandlerPlayServer"),
                                             Type.getObjectType("net/minecraft/network/play/client/C17PacketCustomPayload")), false);
