@@ -19,10 +19,12 @@ public class UgocraftHook {
     public static final String internalName = UgocraftHook.class.getName().replace(".", "/");
 
 
+    @SuppressWarnings("unused")
     public static File getUgocraftJarLocation() {
         return Ugorge.instance().ugocraftJar;
     }
 
+    @SuppressWarnings("unused")
     public static File getMinecraftServerLocation() {
         String mcServerURI;
         try {
@@ -39,14 +41,17 @@ public class UgocraftHook {
         return new File(mcServerURI);
     }
 
+    @SuppressWarnings("unused")
     public static ClassLoader getUgocraftClassLoader() {
         return Ugorge.instance().loader.getClassLoader();
     }
 
+    @SuppressWarnings("unused")
     public static void c001(NetHandlerPlayClient netHandlerPlayClient, S3FPacketCustomPayload s3FPacketCustomPayload) {
         Ugorge.instance().invoker.invoke_c001(netHandlerPlayClient, s3FPacketCustomPayload);
     }
 
+    @SuppressWarnings("unused")
     public static void s001(NetHandlerPlayServer netHandlerPlayServer, C17PacketCustomPayload c17PacketCustomPayload) {
         Ugorge.instance().invoker.invoke_s001(netHandlerPlayServer, c17PacketCustomPayload);
     }
