@@ -3,15 +3,8 @@ package com.knsn92.ugorge.ugocraft;
 import com.knsn92.ugorge.util.MCDeobfuscationHelper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.objectweb.asm.ClassReader;
-import org.objectweb.asm.tree.ClassNode;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
 import java.util.*;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 
 /**
  * UgoCraftの殆どのクラスの親クラスと実装しているインターフェース、フィールドとメソッドの一覧を保存します。
@@ -161,7 +154,7 @@ public class UgocraftClassData {
      * @param name 探す難読化されたフィールド名
      * @return 難読化解除されたフィールド名
      */
-    public String findUgocraftImplSrcFieldName(String owner, String name) {
+    public String findImplSrcFieldName(String owner, String name) {
         String currentClassName = MCDeobfuscationHelper.map(owner);
 
         while(currentClassName != null) {
@@ -180,7 +173,7 @@ public class UgocraftClassData {
      * @param desc 探すメソッドのシグネチャ
      * @return 難読化解除されたメソッド名
      */
-    public String findUgocraftImplSrcMethodName(String owner, String name, String desc) {
+    public String findImplSrcMethodName(String owner, String name, String desc) {
 
         String currentClassName = MCDeobfuscationHelper.map(owner);
 

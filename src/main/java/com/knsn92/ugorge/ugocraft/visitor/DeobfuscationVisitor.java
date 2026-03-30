@@ -53,7 +53,7 @@ public class DeobfuscationVisitor extends ClassVisitor implements Opcodes {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 
-        String methodName = this.ugocraftClassData.findUgocraftImplSrcMethodName(className, name, desc);
+        String methodName = this.ugocraftClassData.findImplSrcMethodName(className, name, desc);
 
         MethodVisitor superMethodVisitor = super.visitMethod(access, methodName, desc, signature, exceptions);
         return new DeobfuscationMethodVisitor(ASM5, superMethodVisitor, name);
@@ -72,7 +72,7 @@ public class DeobfuscationVisitor extends ClassVisitor implements Opcodes {
         @Override
         public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
 
-            String methodName = ugocraftClassData.findUgocraftImplSrcMethodName(owner, name, desc);
+            String methodName = ugocraftClassData.findImplSrcMethodName(owner, name, desc);
 
             super.visitMethodInsn(opcode, owner, methodName, desc, itf);
         }
@@ -85,7 +85,7 @@ public class DeobfuscationVisitor extends ClassVisitor implements Opcodes {
                 return;
             }
 
-            String fieldName = ugocraftClassData.findUgocraftImplSrcFieldName(owner, name);
+            String fieldName = ugocraftClassData.findImplSrcFieldName(owner, name);
 
             super.visitFieldInsn(opcode, owner, fieldName, desc);
         }
