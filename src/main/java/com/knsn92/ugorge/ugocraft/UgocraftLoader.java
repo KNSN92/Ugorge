@@ -2,9 +2,7 @@ package com.knsn92.ugorge.ugocraft;
 
 import com.knsn92.ugorge.util.ByteArrayClassLoader;
 import com.knsn92.ugorge.util.MultiClassVisitor;
-import cpw.mods.fml.common.asm.transformers.deobf.FMLDeobfuscatingRemapper;
 import net.minecraft.server.MinecraftServer;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
@@ -124,7 +122,7 @@ public class UgocraftLoader {
 
         try(
             JarInputStream jis = new JarInputStream(Files.newInputStream(ugocraftJarFile.toPath()));
-            JarOutputStream jos = new JarOutputStream(Files.newOutputStream(output.toPath()));
+            JarOutputStream jos = new JarOutputStream(Files.newOutputStream(output.toPath()))
         ) {
             JarEntry entry;
             while ((entry = jis.getNextJarEntry()) != null) {
