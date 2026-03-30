@@ -31,13 +31,9 @@ public class UgocraftInvoker {
     /**
      * 初期化。{@link UgocraftLoader}の初期化が前提。
      */
-    public UgocraftInvoker(UgocraftLoader loader) {
-        Class<?> serverInterrupt = loader.getClass(serverInterruptClassName);
-        Class<?> clientInterrupt = loader.getClass(clientInterruptClassName);
-
-        if(serverInterrupt == null || clientInterrupt == null) {
-            return;
-        }
+    public UgocraftInvoker(ClassLoader loader) throws ClassNotFoundException {
+        Class<?> serverInterrupt = loader.loadClass(serverInterruptClassName);
+        Class<?> clientInterrupt = loader.loadClass(clientInterruptClassName);
 
         try {
             c001 = clientInterrupt.getDeclaredMethod("c001", NetHandlerPlayClient.class, S3FPacketCustomPayload.class);

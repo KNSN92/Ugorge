@@ -81,19 +81,6 @@ public class UgocraftLoader {
     }
 
     /**
-     * JarファイルからロードしたUgoCraftのクラスを読み出します。
-     * @param className 読み出すクラス名(例:java.lang.Object)
-     * @return 読み出したクラスオブジェクト。見つからなければnull
-     */
-    public Class<?> getClass(String className) {
-        try {
-            return this.ugocraftClassLoader.loadClass(className);
-        } catch (ClassNotFoundException ignore) {
-            return null;
-        }
-    }
-
-    /**
      * 内部で使われているクラスローダーのgetter。
      * @return 内部で使われているクラスローダー
      */

@@ -53,7 +53,7 @@ public class Ugorge {
 
         UgocraftClassData.loadData(this.ugocraftJar);
         this.loader = new UgocraftLoader(this.ugocraftJar);
-        this.invoker = new UgocraftInvoker(loader);
+        this.invoker = new UgocraftInvoker(this.loader.getClassLoader());
 
         LOGGER.info("UgoCraft Loaded");
 
@@ -91,15 +91,13 @@ public class Ugorge {
         }
     }
 
-    private void registerBlockRender() throws IllegalAccessException, NoSuchFieldException {
-        Class<?> ugoRenderRegistry = this.loader.getClass("net.maocat.Loader.Process.Client.Shantaks");
-        if(ugoRenderRegistry != null) {
-            Map<?, ?> renderers = (Map<?, ?>) ugoRenderRegistry.getField("morning_glory").get(null);
+    private void registerBlockRender() throws IllegalAccessException, NoSuchFieldException, ClassNotFoundException {
+        Class<?> ugoRenderRegistry = this.loader.getClassLoader().loadClass("net.maocat.Loader.Process.Client.Shantaks");
+        Map<?, ?> renderers = (Map<?, ?>) ugoRenderRegistry.getField("morning_glory").get(null);
 
-            for (Object renderId : renderers.keySet()) {
-                UgocraftBlockRender render = new UgocraftBlockRender((int) renderId);
-                RenderingRegistry.registerBlockHandler(render);
-            }
+        for (Object renderId : renderers.keySet()) {
+            UgocraftBlockRender render = new UgocraftBlockRender((int) renderId);
+            RenderingRegistry.registerBlockHandler(render);
         }
     }
 }
