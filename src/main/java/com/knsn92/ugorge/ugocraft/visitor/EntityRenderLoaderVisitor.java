@@ -1,7 +1,6 @@
 package com.knsn92.ugorge.ugocraft.visitor;
 
 import com.knsn92.ugorge.ugocraft.UgocraftHook;
-import com.knsn92.ugorge.util.ASMHelper;
 import org.apache.commons.lang3.ArrayUtils;
 import org.objectweb.asm.*;
 
@@ -23,7 +22,7 @@ public class EntityRenderLoaderVisitor extends ClassVisitor implements Opcodes {
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
 
-        if (ASMHelper.equalsNameDesc(name, desc, "morning_glory", "(Ljava/lang/ClassLoader;Ljava/lang/String;)V")) {
+        if ("morning_glory(Ljava/lang/ClassLoader;Ljava/lang/String;)V".equals(name + desc)) {
 
             return new MethodVisitor(ASM5, mv) {
 
@@ -44,7 +43,7 @@ public class EntityRenderLoaderVisitor extends ClassVisitor implements Opcodes {
                     }
                 }
             };
-        }else if (ASMHelper.equalsNameDesc(name, desc, "morning_glory", "()V")) {
+        }else if ("morning_glory()V".equals(name + desc)) {
 
             return new MethodVisitor(ASM5, mv) {
 
@@ -97,11 +96,11 @@ public class EntityRenderLoaderVisitor extends ClassVisitor implements Opcodes {
                 @Override
                 public void visitMethodInsn(int opcode, String owner, String name, String desc, boolean itf) {
                     if (line == 51 || line == 53) {
-                        boolean isIgnoreMethod = ArrayUtils.contains(IGNORE_METHODS, ASMHelper.toFullMethodName(owner, name, desc));
+                        boolean isIgnoreMethod = ArrayUtils.contains(IGNORE_METHODS, String.format("%s.%s%s", owner, name, desc));
                         if(isIgnoreMethod) {
                             return;
                         }
-                        if ("java/io/File.<init>(Ljava/net/URI;)V".equals(ASMHelper.toFullMethodName(owner, name, desc))) {
+                        if ("java/io/File.<init>(Ljava/net/URI;)V".equals(String.format("%s.%s%s", owner, name, desc))) {
                             String fieldName = line == 51 ? "getMinecraftServerLocation" : "getUgocraftJarLocation";
                             super.visitMethodInsn(INVOKESTATIC, UgocraftHook.internalName, fieldName, "()Ljava/io/File;", false);
                             return;

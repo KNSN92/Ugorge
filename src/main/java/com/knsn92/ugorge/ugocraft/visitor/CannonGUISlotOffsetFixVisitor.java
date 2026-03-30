@@ -1,7 +1,6 @@
 package com.knsn92.ugorge.ugocraft.visitor;
 
 import com.knsn92.ugorge.ugocraft.UgocraftClassData;
-import com.knsn92.ugorge.util.ASMHelper;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
@@ -20,7 +19,7 @@ public class CannonGUISlotOffsetFixVisitor extends ClassVisitor implements Opcod
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor mv = super.visitMethod(access, name, desc, signature, exceptions);
 
-        if(!ASMHelper.equalsNameDesc(name, desc, "b", "()V")) {
+        if(!"b()V".equals(name + desc)) {
             return mv;
         }
 
