@@ -56,7 +56,7 @@ public class UgocraftLoader {
                 if(entry.getName().endsWith(".class")) {
                     ClassReader cr = new ClassReader(jis);
                     String internalClassName = cr.getClassName();
-                    if(ArrayUtils.contains(UgocraftClassData.rewriteListClasses, internalClassName)) {
+                    if(entry.getName().startsWith("rewrite/")) {
                         continue;
                     }
                     loadedClassReaders.put(internalClassName, cr);
@@ -141,7 +141,7 @@ public class UgocraftLoader {
 
                     String className = entry.getName();
 
-                    if (entry.getName().startsWith("rewrite/")) {
+                    if (className.startsWith("rewrite/")) {
                         String rewriteClassName = className.substring(className.lastIndexOf("/") + 1, className.indexOf("."));
                         String mcpName = FMLDeobfuscatingRemapper.INSTANCE.map(rewriteClassName);
                         className = "rewrite/" + mcpName.substring(mcpName.lastIndexOf("/") + 1) + ".class";
