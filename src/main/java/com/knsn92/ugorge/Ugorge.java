@@ -7,6 +7,7 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.launchwrapper.Launch;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,11 +80,11 @@ public class Ugorge {
 
     @SuppressWarnings("unchecked")
     private void registerEntityRender() {
-        Map<Class<?>, Render> ugocraftEntityRenderMap = new HashMap<>();
+        Map<Class<Entity>, Render> ugocraftEntityRenderMap = new HashMap<>();
 
         this.invoker.invoke_c002(ugocraftEntityRenderMap);
 
-        for(Map.Entry<Class<?>, Render> entry: ugocraftEntityRenderMap.entrySet()) {
+        for(Map.Entry<Class<Entity>, Render> entry: ugocraftEntityRenderMap.entrySet()) {
             Render render = entry.getValue();
             render.setRenderManager(RenderManager.instance);
             RenderManager.instance.entityRenderMap.put(entry.getKey(), render);

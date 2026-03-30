@@ -3,6 +3,8 @@ package com.knsn92.ugorge.ugocraft;
 import net.minecraft.block.Block;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.entity.Entity;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
@@ -80,7 +82,7 @@ public class UgocraftInvoker {
      * @param renderMap
      */
     @SuppressWarnings("unused")
-    public void invoke_c002(Map<?, ?> renderMap) {
+    public void invoke_c002(Map<Class<Entity>, Render> renderMap) {
         try {
             c002.invoke(null, renderMap);
         } catch (InvocationTargetException | IllegalAccessException e) {
