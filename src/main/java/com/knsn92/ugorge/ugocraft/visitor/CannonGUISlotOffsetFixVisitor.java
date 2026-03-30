@@ -1,5 +1,6 @@
 package com.knsn92.ugorge.ugocraft.visitor;
 
+import com.knsn92.ugorge.ugocraft.UgocraftClassData;
 import com.knsn92.ugorge.util.ASMHelper;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.Label;
@@ -11,8 +12,8 @@ import org.objectweb.asm.Opcodes;
  */
 public class CannonGUISlotOffsetFixVisitor extends ClassVisitor implements Opcodes {
 
-    public CannonGUISlotOffsetFixVisitor(int api, ClassVisitor cv) {
-        super(api, new DeobfuscationVisitor(api, cv));
+    public CannonGUISlotOffsetFixVisitor(int api, ClassVisitor cv, UgocraftClassData ugocraftClassData) {
+        super(api, new DeobfuscationVisitor(api, cv, ugocraftClassData));
     }
 
     @Override

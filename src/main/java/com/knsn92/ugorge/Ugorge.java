@@ -51,7 +51,6 @@ public class Ugorge {
         // Exclude UgoCraft classes from being loaded by the default classloader
         Launch.classLoader.addClassLoaderExclusion("net.maocat.");
 
-        UgocraftClassData.loadData(this.ugocraftJar);
         this.loader = new UgocraftLoader(this.ugocraftJar);
         this.invoker = new UgocraftInvoker(this.loader.getClassLoader());
 

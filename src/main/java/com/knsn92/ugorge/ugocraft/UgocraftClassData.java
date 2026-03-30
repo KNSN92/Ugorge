@@ -20,45 +20,16 @@ public class UgocraftClassData {
 
     public static final String[] rewriteListClasses = {"bjb", "bnn", "blm", "nh"};
 
-    private static Map<String, String>   superClasses = null;
-    private static Map<String, String[]> implInterfaces = null;
-    private static Map<String, String[]> fields = null;
-    private static Map<String, String[]> methods = null;
+    private final Map<String, String>   superClasses = new HashMap<>();
+    private final Map<String, String[]> implInterfaces = new HashMap<>();
+    private final Map<String, String[]> fields = new HashMap<>();
+    private final Map<String, String[]> methods = new HashMap<>();
 
-    /**
-     * UgoCraftのJarファイルから情報を読み込みます。
-     * @param ugocraftJarFile 入力のjarファイル
-     * @throws IOException jarファイルが読み取れなかった場合
-     */
-    public static void loadData(File ugocraftJarFile) throws IOException {
-        superClasses = new HashMap<>();
-        implInterfaces = new HashMap<>();
-        fields = new HashMap<>();
-        methods = new HashMap<>();
-
-        JarInputStream jis = new JarInputStream(Files.newInputStream(ugocraftJarFile.toPath()));
-        JarEntry entry;
-        while((entry = jis.getNextJarEntry()) != null) {
-            if(entry.getName().endsWith(".class")) {
-
-                ClassReader cr = new ClassReader(jis);
-
-                String className = cr.getClassName();
-
-                if(ArrayUtils.contains(rewriteListClasses, className)) {
-                    continue;
-                }
-
-                String superName = cr.getSuperName();
-
-                superClasses.put(className, superName);
-                implInterfaces.put(className, cr.getInterfaces());
-                ClassNode cn = new ClassNode();
-                cr.accept(cn, ClassReader.EXPAND_FRAMES);
-                fields.put(className, cn.fields.stream().map(f -> f.name + StringUtils.SPACE + f.desc).toArray(String[]::new));
-                methods.put(className, cn.methods.stream().map(m -> m.name + m.desc).toArray(String[]::new));
-            }
-        }
+    public void putData(String internalClassName, String superClassName, String[] implInterfaceNames, String[] fieldNames, String[] methodNames) {
+        this.superClasses.put(internalClassName, superClassName);
+        this.implInterfaces.put(internalClassName, implInterfaceNames);
+        this.fields.put(internalClassName, fieldNames);
+        this.methods.put(internalClassName, methodNames);
     }
 
     /**
@@ -66,8 +37,8 @@ public class UgocraftClassData {
      * @param internalClassName 内部クラス名(例:java/lang/Object)
      * @return そのクラスがUgoCraftに含まれるか
      */
-    public static boolean hasClass(String internalClassName) {
-        return superClasses.containsKey(internalClassName);
+    public boolean hasClass(String internalClassName) {
+        return this.superClasses.containsKey(internalClassName);
     }
 
     /**
@@ -75,8 +46,8 @@ public class UgocraftClassData {
      * @param internalClassName 内部クラス名(例:java/lang/Object)
      * @return そのUgoCraftクラスのスーパークラス名
      */
-    public static String getSuperClass(String internalClassName) {
-        return superClasses.get(internalClassName);
+    public String getSuperClass(String internalClassName) {
+        return this.superClasses.get(internalClassName);
     }
 
     /**
@@ -84,8 +55,8 @@ public class UgocraftClassData {
      * @param internalClassName 内部クラス名(例:java/lang/Object)
      * @return そのUgoCraftクラスの実装しているインターフェースの一覧
      */
-    public static String[] getImplInterfaces(String internalClassName) {
-        return implInterfaces.get(internalClassName);
+    public String[] getImplInterfaces(String internalClassName) {
+        return this.implInterfaces.get(internalClassName);
     }
 
     /**
@@ -94,8 +65,8 @@ public class UgocraftClassData {
      * @param internalInterfaceClassName 内部インターフェースクラス名(例:java/lang/Object)
      * @return そのUgoCraftクラスがそのインターフェースを実装しているか
      */
-    public static boolean hasImplInterface(String internalClassName, String internalInterfaceClassName) {
-        return ArrayUtils.contains(getImplInterfaceNames(internalClassName), internalInterfaceClassName);
+    public boolean hasImplInterface(String internalClassName, String internalInterfaceClassName) {
+        return ArrayUtils.contains(this.getImplInterfaceNames(internalClassName), internalInterfaceClassName);
     }
 
     /**
@@ -103,8 +74,8 @@ public class UgocraftClassData {
      * @param internalClassName 内部クラス名(例:java/lang/Object)
      * @return そのUgoCraftクラスに存在するフィールドの一覧
      */
-    public static String[] getFields(String internalClassName) {
-        return fields.get(internalClassName);
+    public String[] getFields(String internalClassName) {
+        return this.fields.get(internalClassName);
     }
 
     /**
@@ -113,8 +84,8 @@ public class UgocraftClassData {
      * @param fieldName フィールド名
      * @return そのUgoCraftクラスがそのフィールドを持っているかを返します。
      */
-    public static boolean hasField(String internalClassName, String fieldName) {
-        return ArrayUtils.contains(getFields(internalClassName), fieldName);
+    public boolean hasField(String internalClassName, String fieldName) {
+        return ArrayUtils.contains(this.getFields(internalClassName), fieldName);
     }
 
     /**
@@ -122,8 +93,8 @@ public class UgocraftClassData {
      * @param internalClassName 内部クラス名(例:java/lang/Object)
      * @return そのUgoCraftクラスに存在するメソッドの一覧
      */
-    public static String[] getMethods(String internalClassName) {
-        return methods.get(internalClassName);
+    public String[] getMethods(String internalClassName) {
+        return this.methods.get(internalClassName);
     }
 
     /**
@@ -133,8 +104,8 @@ public class UgocraftClassData {
      * @param methodDesc メソッドのシグネチャ
      * @return そのUgoCraftクラスがそのフィールドを持っているかを返します。
      */
-    public static boolean hasMethod(String internalClassName, String methodName, String methodDesc) {
-        return ArrayUtils.contains(getMethods(internalClassName), methodName + StringUtils.SPACE + methodDesc);
+    public boolean hasMethod(String internalClassName, String methodName, String methodDesc) {
+        return ArrayUtils.contains(this.getMethods(internalClassName), methodName + StringUtils.SPACE + methodDesc);
     }
 
 
@@ -147,11 +118,11 @@ public class UgocraftClassData {
         }
     }
 
-    private static String getSuperClassName(String internalClassName) {
+    private String getSuperClassName(String internalClassName) {
         if(internalClassName == null) return null;
 
-        if(UgocraftClassData.hasClass(internalClassName)) {
-            String superClassName = UgocraftClassData.getSuperClass(internalClassName);
+        if(this.hasClass(internalClassName)) {
+            String superClassName = this.getSuperClass(internalClassName);
             return MCDeobfuscationHelper.map(superClassName);
         }else {
             Class<?> superClass = getClassFromString(internalClassName);
@@ -163,12 +134,12 @@ public class UgocraftClassData {
         }
     }
 
-    private static String[] getImplInterfaceNames(String internalClassName) {
+    private String[] getImplInterfaceNames(String internalClassName) {
         if(internalClassName == null) return null;
 
         String[] interfaces;
-        if(UgocraftClassData.hasClass(internalClassName)) {
-            interfaces = UgocraftClassData.getImplInterfaces(internalClassName);
+        if(this.hasClass(internalClassName)) {
+            interfaces = this.getImplInterfaces(internalClassName);
         } else {
             Class<?> clazz = getClassFromString(internalClassName);
             interfaces = Arrays.stream(clazz.getInterfaces())
@@ -190,13 +161,13 @@ public class UgocraftClassData {
      * @param name 探す難読化されたフィールド名
      * @return 難読化解除されたフィールド名
      */
-    public static String findUgocraftImplSrcFieldName(String owner, String name) {
+    public String findUgocraftImplSrcFieldName(String owner, String name) {
         String currentClassName = MCDeobfuscationHelper.map(owner);
 
         while(currentClassName != null) {
             String fieldName = MCDeobfuscationHelper.mapFieldName(MCDeobfuscationHelper.unmap(currentClassName), name);
             if(!Objects.equals(name, fieldName)) return fieldName;
-            currentClassName = getSuperClassName(currentClassName);
+            currentClassName = this.getSuperClassName(currentClassName);
         }
         return name;
     }
@@ -209,7 +180,7 @@ public class UgocraftClassData {
      * @param desc 探すメソッドのシグネチャ
      * @return 難読化解除されたメソッド名
      */
-    public static String findUgocraftImplSrcMethodName(String owner, String name, String desc) {
+    public String findUgocraftImplSrcMethodName(String owner, String name, String desc) {
 
         String currentClassName = MCDeobfuscationHelper.map(owner);
 
@@ -225,10 +196,10 @@ public class UgocraftClassData {
                 methodName = MCDeobfuscationHelper.mapMethodName(MCDeobfuscationHelper.unmap(poppedInterfaceName), name, desc);
                 if(!Objects.equals(name, methodName)) return methodName;
 
-                String superPoppedInterfaceName = getSuperClassName(poppedInterfaceName);
+                String superPoppedInterfaceName = this.getSuperClassName(poppedInterfaceName);
                 if(superPoppedInterfaceName != null) interfaceStack.push(superPoppedInterfaceName);
             }
-            currentClassName = getSuperClassName(currentClassName);
+            currentClassName = this.getSuperClassName(currentClassName);
         }
         return name;
     }
