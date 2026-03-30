@@ -65,8 +65,6 @@ public class UgocraftInvoker {
 
     /**
      * パケット通信関係のクライアント側？
-     * @param netHandlerPlayClient
-     * @param s3FPacketCustomPayload
      */
     @SuppressWarnings("unused")
     public void invoke_c001(NetHandlerPlayClient netHandlerPlayClient, S3FPacketCustomPayload s3FPacketCustomPayload) {
@@ -79,7 +77,6 @@ public class UgocraftInvoker {
 
     /**
      * UgoCraftのエンティティのレンダーを引数のMapにputする処理とUgoCraftの初期化を行う部分だと思われる
-     * @param renderMap
      */
     @SuppressWarnings("unused")
     public void invoke_c002(Map<Class<Entity>, Render> renderMap) {
@@ -92,14 +89,6 @@ public class UgocraftInvoker {
 
     /**
      * ForgeのISimpleBlockRenderingHandlerのrenderWorldBlockの所の処理
-     * @param modelId
-     * @param renderer
-     * @param world
-     * @param block
-     * @param x
-     * @param y
-     * @param z
-     * @return
      */
     @SuppressWarnings("unused")
     public boolean invoke_c003(int modelId, RenderBlocks renderer, IBlockAccess world, Block block, int x, int y, int z) {
@@ -112,10 +101,6 @@ public class UgocraftInvoker {
 
     /**
      * ForgeのISimpleBlockRenderingHandlerのrenderInventoryBlockの所の処理
-     * @param modelId
-     * @param renderer
-     * @param block
-     * @param metadata
      */
     @SuppressWarnings("unused")
     public void invoke_c004(int modelId, RenderBlocks renderer, Block block, int metadata) {
@@ -128,8 +113,6 @@ public class UgocraftInvoker {
 
     /**
      * ForgeのISimpleBlockRenderingHandlerのshouldRender3DInInventoryの所の処理
-     * @param modelId
-     * @return
      */
     @SuppressWarnings("unused")
     public boolean invoke_c005(int modelId) {
@@ -142,8 +125,6 @@ public class UgocraftInvoker {
 
     /**
      * パケット通信関係のサーバー側？
-     * @param netHandlerPlayServer
-     * @param c17PacketCustomPayload
      */
     @SuppressWarnings("unused")
     public void invoke_s001(NetHandlerPlayServer netHandlerPlayServer, C17PacketCustomPayload c17PacketCustomPayload) {
