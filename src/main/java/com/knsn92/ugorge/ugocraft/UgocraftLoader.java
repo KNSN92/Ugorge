@@ -37,6 +37,10 @@ public class UgocraftLoader {
         this.ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Shub_Niggurath", EntityRenderLoaderVisitor::new);
         this.ugocraftClassVisitorContext.put("net/maocat/Loader/Process/Client/Byakhee", WaitUntilSoundMgrLoadFixVisitor::new);
         this.ugocraftClassVisitorContext.put("net/maocat/UgoCraft/a/Azathoth", (api, cv) -> new CannonGUISlotOffsetFixVisitor(api, cv, this.classData));
+        this.ugocraftClassVisitorContext.put("net/maocat/UgoCraft/Zoth_Ommog",
+                (api, cv) -> new DeobfuscationVisitor(api, new ZothOmmogFixVisitor(api, cv), this.classData));
+        this.ugocraftClassVisitorContext.put("net/maocat/UgoCraft/Nyogtha",
+                (api, cv) -> new NyogthaTimeFixVisitor(api, new DeobfuscationVisitor(api, cv, this.classData)));
 
         this.ugocraftClassVisitorContext.setDefault((api, cv) -> new DeobfuscationVisitor(api, cv, this.classData));
     }
