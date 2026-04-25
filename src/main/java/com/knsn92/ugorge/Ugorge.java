@@ -88,7 +88,9 @@ public class Ugorge {
         this.invoker.invoke_c002(ugocraftEntityRenderMap);
 
         for(Map.Entry<Class<Entity>, Render> entry: ugocraftEntityRenderMap.entrySet()) {
-            Render render = entry.getValue();
+            Render render = "net.maocat.UgoCraft.Yig".equals(entry.getKey().getName())
+                    ? new UgocraftMovingEntityRender()
+                    : entry.getValue();
             render.setRenderManager(RenderManager.instance);
             RenderManager.instance.entityRenderMap.put(entry.getKey(), render);
         }
