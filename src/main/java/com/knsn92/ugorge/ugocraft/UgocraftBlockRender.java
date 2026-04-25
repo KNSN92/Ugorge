@@ -19,12 +19,12 @@ public class UgocraftBlockRender implements ISimpleBlockRenderingHandler {
 
     @Override
     public boolean renderWorldBlock(IBlockAccess world, int x, int y, int z, Block block, int modelId, RenderBlocks renderer) {
-        return Ugorge.instance().invoker.invoke_c003(modelId, renderer, world, block, x, y, z);
+        return UgocraftSafeRenderer.renderWorldBlock(world, x, y, z, block, renderer);
     }
 
     @Override
     public void renderInventoryBlock(Block block, int metadata, int modelId, RenderBlocks renderer) {
-        Ugorge.instance().invoker.invoke_c004(modelId, renderer, block, metadata);
+        UgocraftSafeRenderer.renderInventoryBlock(block, metadata, renderer);
     }
 
     @Override
